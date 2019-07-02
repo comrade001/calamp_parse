@@ -62,18 +62,18 @@ class UdpUnicastServer implements Runnable {
                     mensaje.substring(0, carrete += BYTE), 16);
             
             int numOfBits = 8;
-            boolean[] booleans = new boolean[numOfBits];
+            boolean[] OptionsByteBoolean = new boolean[numOfBits];
             for(int i = 0; i< numOfBits; i++){
-                booleans[i] = (OptionsByte & 1 << i) != 0;
+                OptionsByteBoolean[i] = (OptionsByte & 1 << i) != 0;
             }
             
-            if(booleans[0]){
+            if(OptionsByteBoolean[0]){
                 Integer MobileIdLength = Integer.parseInt(
                         mensaje.substring(carrete, carrete += BYTE), 16);
                 String MobileId = mensaje.substring(carrete
                         , carrete += MobileIdLength * BYTE);
             }
-            if(booleans[1]){
+            if(OptionsByteBoolean[1]){
                 Integer MobileIdTypeLength = Integer.parseInt(
                         mensaje.substring(carrete, carrete += BYTE), 16);
                 Integer MobileIdType = Integer.parseInt(
@@ -100,8 +100,34 @@ class UdpUnicastServer implements Runnable {
             double Longitude = (int) Long.parseLong(mensaje.substring(
                                     carrete, carrete += 4 * BYTE), 16) / 1e7;
             
-            Long Altitude = Long.parseLong(mensaje.substring(
-                    carrete, carrete += 4 * BYTE));
+            double Altitude = (int) Long.parseLong(mensaje.substring(
+                                    carrete, carrete += 4 * BYTE), 16);
+            
+            double Speed = (int) Long.parseLong(mensaje.substring(
+                    carrete, carrete += 4 * BYTE), 16) * 0.036;
+            
+            Integer Heading = (int) Integer.parseInt(mensaje.substring(
+                    carrete, carrete += 2 * BYTE), 16);
+            
+            Integer Satellites = Integer.parseInt(
+                    mensaje.substring(carrete, carrete += BYTE), 16);
+            
+            Integer FixStatus = Integer.parseInt(
+                    mensaje.substring(carrete, carrete += BYTE), 16);
+            
+            boolean[] FixStatusBoolean = new boolean[numOfBits];
+            for(int i = 0; i< numOfBits; i++){
+                FixStatusBoolean[i] = (FixStatus & 1 << i) != 0;
+            }
+            
+            Integer Carrier = Integer.parseInt(
+                    mensaje.substring(carrete, carrete += 2 * BYTE), 16);
+            
+            short RSSI = (short) Integer.parseInt(mensaje.substring(
+                                    carrete, carrete += 2 * BYTE), 16);
+            
+            Integer CommState = Integer.parseInt(
+                    mensaje.substring(carrete, carrete += BYTE), 16);
             
             System.out.println("Count " + count + " : " + mensaje);
             
