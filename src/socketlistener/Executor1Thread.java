@@ -143,6 +143,29 @@ class UdpUnicastServer implements Runnable {
                 for(int i = 0; i< numOfBits; i++){
                     CommStateBoolean[i] = (CommState & 1 << i) != 0;
                 }
+                
+                double HDOP = (int) Long.parseLong(mensaje.substring(
+                        carrete, carrete += BYTE), 16) / 1e1;
+                
+                Integer Inputs = Integer.parseInt(
+                        mensaje.substring(carrete, carrete += BYTE), 16);
+                boolean[] InputsBoolean = new boolean[numOfBits];
+                for(int i = 0; i< numOfBits; i++){
+                    InputsBoolean[i] = (Inputs & 1 << i) != 0;
+                }
+                
+                Integer UnitStatus = Integer.parseInt(
+                        mensaje.substring(carrete, carrete += BYTE), 16);
+                boolean[] UnitStatusBoolean = new boolean[numOfBits];
+                for(int i = 0; i< numOfBits; i++){
+                    UnitStatusBoolean[i] = (UnitStatus & 1 << i) != 0;
+                }
+                
+                Integer EventIndex = Integer.parseInt(
+                        mensaje.substring(carrete, carrete += BYTE), 16);
+                
+                Integer EventCode = Integer.parseInt(
+                        mensaje.substring(carrete, carrete += BYTE), 16);
 
                 InetAddress address = peticion.getAddress();
                 
