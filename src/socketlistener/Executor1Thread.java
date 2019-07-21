@@ -62,7 +62,6 @@ class UdpUnicastServer implements Runnable {
                 String mensaje = sb.toString();
                 System.out.println("Input " + count + " : " + mensaje);
                 int carrete = 0;
-                OptionsHeader.getHeader(mensaje, carrete);
                 Integer OptionsByte = Integer.parseInt(
                         mensaje.substring(0, carrete += BYTE), 16);
 
@@ -171,18 +170,17 @@ class UdpUnicastServer implements Runnable {
                     
                     Integer Accums = Integer.parseInt(
                             mensaje.substring(carrete, carrete += BYTE), 16);
-                    boolean[] AcumsBoolean = new boolean[numOfBits];
-                    for(int i = 0; i< numOfBits; i++){
-                        AcumsBoolean[i] = (Accums & 1 << i) != 0;
-                    }
                     
-//                    Integer AcumsFormatType = 
-//                            Integer.parseInt(AcumsBoolean.substring(0, 2), 2);
-//                    
-//                    Integer AcumsCount = Integer.parseInt(
-//                            AcumsBoolean.substring(2), 2);
+                    
+                    Integer AccumsCount = socketlistener.Accums.getAcccumCount(Accums);
                     
                     String Spare = mensaje.substring(carrete, carrete += BYTE);
+                    
+                    Long[] Accumsvalue = new Long[AccumsCount];
+                    
+                    for (int i = 0; i < AccumsCount; i++) {
+                        Accumsvalue[i] = Long.parseLong(mensaje.substring(carrete, carrete += 4 * BYTE), 16);
+                    }
                     
                     
                 }
