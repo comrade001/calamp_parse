@@ -24,13 +24,22 @@ public class Executor1Thread {
     public static void main(String[] args) throws IOException{
         try{
             System.out.println("The capitalization server is running...");
-            int port = 9094;
+            int port = Integer.parseInt(args[0]);
             ExecutorService pool = Executors.newFixedThreadPool(10);
             pool.execute(new UdpUnicastServer(port));
         }
         catch(Exception e){
 
         }   
+    }
+}
+
+class Carrete{
+
+    public int posicion;
+    
+    public Carrete() {
+        this.posicion = 0;
     }
 }
 
@@ -61,9 +70,13 @@ class UdpUnicastServer implements Runnable {
 
                 String mensaje = sb.toString();
                 System.out.println("Input " + count + " : " + mensaje);
-                int carrete = 0;
+//                int carrete = 0;
+                
+                Carrete carrete = new Carrete();
+//                Integer OptionsByte = Integer.parseInt(
+//                        mensaje.substring(0, carrete += BYTE), 16);
                 Integer OptionsByte = Integer.parseInt(
-                        mensaje.substring(0, carrete += BYTE), 16);
+                        mensaje.substring(0, carrete.posicion += BYTE), 16);
 
                 int numOfBits = 8;
                 boolean[] OptionsByteBoolean = new boolean[numOfBits];
@@ -75,56 +88,56 @@ class UdpUnicastServer implements Runnable {
                 String MobileId = null;
                 if(OptionsByteBoolean[0]){
                     MobileIdLength = Integer.parseInt(
-                            mensaje.substring(carrete, carrete += BYTE), 16);
-                    MobileId = mensaje.substring(carrete
-                            , carrete += MobileIdLength * BYTE);
+                            mensaje.substring(carrete.posicion, carrete.posicion += BYTE), 16);
+                    MobileId = mensaje.substring(carrete.posicion
+                            , carrete.posicion += MobileIdLength * BYTE);
                 }
                 Integer MobileIdTypeLength = null;
                 String MobileIdType = null;
                 if(OptionsByteBoolean[1]){
                     MobileIdTypeLength = Integer.parseInt(
-                            mensaje.substring(carrete, carrete += BYTE), 16);
+                            mensaje.substring(carrete.posicion, carrete.posicion += BYTE), 16);
     //                Integer MobileIdType = Integer.parseInt(
     //                        mensaje.substring(
-    //                                carrete, carrete += MobileIdTypeLength * BYTE));
+    //                                carrete.posicion, carrete.posicion += MobileIdTypeLength * BYTE));
                     MobileIdType = mensaje.substring(
-                                    carrete, carrete += MobileIdTypeLength * BYTE);
+                                    carrete.posicion, carrete.posicion += MobileIdTypeLength * BYTE);
                 }
-                String ServiceType = mensaje.substring(carrete, carrete += BYTE);
+                String ServiceType = mensaje.substring(carrete.posicion, carrete.posicion += BYTE);
                 Integer MessageType = Integer.parseInt( 
-                        mensaje.substring(carrete, carrete += BYTE), 16);
+                        mensaje.substring(carrete.posicion, carrete.posicion += BYTE), 16);
                 Integer SequenceNumber = Integer.parseInt(
-                        mensaje.substring(carrete, carrete += 2 * BYTE), 16); 
+                        mensaje.substring(carrete.posicion, carrete.posicion += 2 * BYTE), 16); 
                 
                 if(MessageType == 2){
                     java.util.Date UpdateTime = new java.util.Date(
                             Long.parseLong(mensaje.substring(
-                                            carrete, carrete += 4 * BYTE), 16) * 1000);
+                                            carrete.posicion, carrete.posicion += 4 * BYTE), 16) * 1000);
 
                     java.util.Date TimeOfFix = new java.util.Date(
                             Long.parseLong(mensaje.substring(
-                                            carrete, carrete += 4 * BYTE), 16) * 1000);
+                                            carrete.posicion, carrete.posicion += 4 * BYTE), 16) * 1000);
 
                     double Latitude = (int) Long.parseLong(mensaje.substring(
-                                            carrete, carrete += 4 * BYTE), 16) / 1e7;
+                                            carrete.posicion, carrete.posicion += 4 * BYTE), 16) / 1e7;
 
                     double Longitude = (int) Long.parseLong(mensaje.substring(
-                                            carrete, carrete += 4 * BYTE), 16) / 1e7;
+                                            carrete.posicion, carrete.posicion += 4 * BYTE), 16) / 1e7;
 
                     double Altitude = (int) Long.parseLong(mensaje.substring(
-                                            carrete, carrete += 4 * BYTE), 16);
+                                            carrete.posicion, carrete.posicion += 4 * BYTE), 16);
 
                     double Speed = (int) Long.parseLong(mensaje.substring(
-                            carrete, carrete += 4 * BYTE), 16) * 0.036;
+                            carrete.posicion, carrete.posicion += 4 * BYTE), 16) * 0.036;
 
                     Integer Heading = (int) Integer.parseInt(mensaje.substring(
-                            carrete, carrete += 2 * BYTE), 16);
+                            carrete.posicion, carrete.posicion += 2 * BYTE), 16);
 
                     Integer Satellites = Integer.parseInt(
-                            mensaje.substring(carrete, carrete += BYTE), 16);
+                            mensaje.substring(carrete.posicion, carrete.posicion += BYTE), 16);
 
                     Integer FixStatus = Integer.parseInt(
-                            mensaje.substring(carrete, carrete += BYTE), 16);
+                            mensaje.substring(carrete.posicion, carrete.posicion += BYTE), 16);
 
                     boolean[] FixStatusBoolean = new boolean[numOfBits];
                     for(int i = 0; i< numOfBits; i++){
@@ -132,13 +145,13 @@ class UdpUnicastServer implements Runnable {
                     }
 
                     Integer Carrier = Integer.parseInt(
-                            mensaje.substring(carrete, carrete += 2 * BYTE), 16);
+                            mensaje.substring(carrete.posicion, carrete.posicion += 2 * BYTE), 16);
 
                     short RSSI = (short) Integer.parseInt(mensaje.substring(
-                                            carrete, carrete += 2 * BYTE), 16);
+                                            carrete.posicion, carrete.posicion += 2 * BYTE), 16);
 
                     Integer CommState = Integer.parseInt(
-                            mensaje.substring(carrete, carrete += BYTE), 16);
+                            mensaje.substring(carrete.posicion, carrete.posicion += BYTE), 16);
 
                     boolean[] CommStateBoolean = new boolean[numOfBits];
                     for(int i = 0; i< numOfBits; i++){
@@ -146,43 +159,41 @@ class UdpUnicastServer implements Runnable {
                     }
 
                     double HDOP = (int) Long.parseLong(mensaje.substring(
-                            carrete, carrete += BYTE), 16) / 1e1;
+                            carrete.posicion, carrete.posicion += BYTE), 16) / 1e1;
 
                     Integer Inputs = Integer.parseInt(
-                            mensaje.substring(carrete, carrete += BYTE), 16);
+                            mensaje.substring(carrete.posicion, carrete.posicion += BYTE), 16);
                     boolean[] InputsBoolean = new boolean[numOfBits];
                     for(int i = 0; i< numOfBits; i++){
                         InputsBoolean[i] = (Inputs & 1 << i) != 0;
                     }
 
                     Integer UnitStatus = Integer.parseInt(
-                            mensaje.substring(carrete, carrete += BYTE), 16);
+                            mensaje.substring(carrete.posicion, carrete.posicion += BYTE), 16);
                     boolean[] UnitStatusBoolean = new boolean[numOfBits];
                     for(int i = 0; i< numOfBits; i++){
                         UnitStatusBoolean[i] = (UnitStatus & 1 << i) != 0;
                     }
 
                     Integer EventIndex = Integer.parseInt(
-                            mensaje.substring(carrete, carrete += BYTE), 16);
+                            mensaje.substring(carrete.posicion, carrete.posicion += BYTE), 16);
 
                     Integer EventCode = Integer.parseInt(
-                            mensaje.substring(carrete, carrete += BYTE), 16);
+                            mensaje.substring(carrete.posicion, carrete.posicion += BYTE), 16);
                     
                     Integer Accums = Integer.parseInt(
-                            mensaje.substring(carrete, carrete += BYTE), 16);
+                            mensaje.substring(carrete.posicion, carrete.posicion += BYTE), 16);
                     
                     
                     Integer AccumsCount = socketlistener.Accums.getAcccumCount(Accums);
                     
-                    String Spare = mensaje.substring(carrete, carrete += BYTE);
+                    String Spare = mensaje.substring(carrete.posicion, carrete.posicion += BYTE);
                     
                     Long[] Accumsvalue = new Long[AccumsCount];
                     
                     for (int i = 0; i < AccumsCount; i++) {
-                        Accumsvalue[i] = Long.parseLong(mensaje.substring(carrete, carrete += 4 * BYTE), 16);
+                        Accumsvalue[i] = Long.parseLong(mensaje.substring(carrete.posicion, carrete.posicion += 4 * BYTE), 16);
                     }
-                    
-                    
                 }
 
                 InetAddress address = peticion.getAddress();
